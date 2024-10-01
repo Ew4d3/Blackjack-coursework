@@ -1,8 +1,4 @@
-##Hit and Stand Buttons: These buttons will only work and appear during the player's turn.
-#Play Again Button: The button will say "Quit" until the round has ended and the result has been displayed, then it will change back to "Play Again."
-#Blackjack on Initial Cards: If the player gets a Blackjack (21) on the initial cards, the game will immediately display the result as "Blackjack!"
-#Update Player and Dealer Totals: The totals are updated only after the card has been flipped and revealed.
-
+#blackjack on initial cards - if the player gets Blackjack (21) on the initial cards game will immediately display Blackjack
 
 import tkinter as tk
 from tkinter import Label, Button, Entry 
