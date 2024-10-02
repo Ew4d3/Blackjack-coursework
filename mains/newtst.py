@@ -11,10 +11,10 @@ values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King',
 cards = [(value + " of " + suit) for suit in suits for value in values]
 random.shuffle(cards)
 
-image_directory = "/Users/ethan/Library/CloudStorage/GoogleDrive-ethanos999@gmail.com/Other computers/Main PC/() School Work  as at 30 04 21 E PC/A-Levels/Computer Science/()Campion School Work/CourseWork code/Blackjack py/PT1/()MainCode/()tkinter/mains/PNG-cards-1.3/"
-card_back = "/Users/ethan/Library/CloudStorage/GoogleDrive-ethanos999@gmail.com/Other computers/Main PC/() School Work  as at 30 04 21 E PC/A-Levels/Computer Science/()Campion School Work/CourseWork code/Blackjack py/PT1/()MainCode/()tkinter/mains/PNG-cards-1.3/card back red.png"
+image_directory = "mains/PNG-cards-1.3/"
+card_back = "mains/PNG-cards-1.3/card back red.png"
 image_refs = []
-bkg="/Users/ethan/Library/CloudStorage/GoogleDrive-ethanos999@gmail.com/Other computers/Main PC/() School Work  as at 30 04 21 E PC/A-Levels/Computer Science/()Campion School Work/CourseWork code/Blackjack py/PT1/()MainCode/()tkinter/mains/3217577-middle.png"
+bkg="r/mains/3217577-middle.png"
 current_bet = 0
 balance = 100
 player_width = 220
@@ -26,7 +26,7 @@ root.geometry('1080x720')
 root.configure(background='#458B00')
 root.title('BlackJack')
 
-# Function to get the user input from the text input box and display it
+#get the user input from the text input box and display it
 def getInputBoxValue():
     global current_bet
     userInput = bet.get()
@@ -40,7 +40,7 @@ def getInputBoxValue():
     except ValueError:
         bet_amount_label.config(text='Invalid input. Please enter a number.')
 
-# Function to update the bet amount label
+#update the bet amount label
 def update_bet_amount(amount):
     global current_bet
     if current_bet + amount > 100:
@@ -49,7 +49,7 @@ def update_bet_amount(amount):
         current_bet += amount
         bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
 
-# Functions called when buttons are clicked
+#called when buttons are clicked
 def hit():
     print('Hit')
     player_hit()
@@ -116,7 +116,7 @@ def slide_card(image_label, final_x, final_y, flip_function=lambda: None, step=1
     current_x, current_y = image_label.winfo_x(), image_label.winfo_y()
     moved = False
 
-    # Move in the x direction
+    #move in the x direction
     if current_x < final_x:
         new_x = min(current_x + step, final_x)
         image_label.place(x=new_x, y=current_y)
@@ -128,7 +128,7 @@ def slide_card(image_label, final_x, final_y, flip_function=lambda: None, step=1
     else:
         new_x = final_x
 
-    # Move in the y direction
+    #move in the y direction
     if current_y < final_y:
         new_y = min(current_y + step, final_y)
         image_label.place(x=new_x, y=new_y)
@@ -175,7 +175,7 @@ def carddisplay(card, x, y):
 def display_initial_cards():
     global player_width, dealer_width, face_down_label, face_down_card
 
-    # Deal and display two cards for the player
+    #deal and display two cards for player
     for _ in range(2):
         card = deal_card()
         carddisplay(card, player_width, player_length)
@@ -188,7 +188,7 @@ def display_initial_cards():
         check_initial_blackjack()
 
 
-    # Deal and display one face-up card for the dealer
+    #deal and display one face up card for dealer
     card = deal_card()
     carddisplay(card, dealer_width, dealer_length)
     card_value_int = card_value(card)
@@ -197,15 +197,15 @@ def display_initial_cards():
     dealer_width += 25
     root.after(800, lambda: dealertotal.config(text=f"Dealer Total: {dealer_total.get()}"))
 
-    # Display one face-down card for the dealer
-    face_down_card = deal_card()  # Save the face-down card for later flipping
+    #display one face down card for dealer
+    face_down_card = deal_card()  #save the face down card for later flipping
     try:
         card_back_image = Image.open(card_back)
         resized_card_back = card_back_image.resize((100, 150))
         tk_card_back = ImageTk.PhotoImage(resized_card_back)
         image_refs.append(tk_card_back)
         face_down_label = Label(root, image=tk_card_back)
-        face_down_label.place(x=0, y=dealer_length)  # Start from outside and slide in
+        face_down_label.place(x=0, y=dealer_length)  #start from left and slide in
         slide_card(face_down_label, dealer_width, dealer_length)
     except FileNotFoundError:
         print(f"Error: File not found at {card_back}")
@@ -291,45 +291,47 @@ def play_again():#game would never end , cards kept on queueing uo against other
 
     root.after(100, lambda: playertotal.config(text=f"Player Total: 0"))
     root.after(100, lambda: dealertotal.config(text=f"Dealer Total: 0"))
+    root.after(100, lambda: result_label.config(text=f"BlackJack Pays 3:2"))
 
 
-    # Reset positions
+
+    #reset positions where card should go
     player_width = 220
     dealer_width = 450
 
-    # Reset hands
+    #reset cards
     player_cards = []
     dealer_cards = []
 
-    # Reset totals
+    #reset totals
     player_total.set(0)
     dealer_total.set(0)
 
-    # Reset bet
+    #reset bet
     current_bet = 0
     bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
 
-    # Clear all card images     before cards would overlay other cards so game would crash etc 
+    #clear all card images     before cards would overlay other cards so game would crash etc 
     for widget in root.winfo_children():
         if isinstance(widget, Label) and widget != bet_amount_label and widget != result_label and widget != playertotal and widget != dealertotal:
             widget.destroy()
 
-    # Deal new initial cards
+    # deal new initial cards
     display_initial_cards()
 
 
-    # Enable hit and stand buttons
+    #enable hit and stand buttons
     hit_button.config(state='normal')
     stand_button.config(state='normal')
     play_again_button.config(text="Quit")
 
-# Main game logic variables
+#main game logic variables
 player_cards = []
 dealer_cards = []
 player_total = tk.IntVar(value=0)
 dealer_total = tk.IntVar(value=0)
 
-# UI Elements
+#ui stuff buttons labels etc
 hit_button = Button(root, text='Hit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hit)
 hit_button.place(x=98, y=92)
 stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=stand)
@@ -362,7 +364,7 @@ playertotal.place(x=170, y=100)
 dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
 dealertotal.place(x=500, y=100)
 
-# Deal initial cards when the game starts
+#deal initial cards when game starts
 display_initial_cards()
 
 root.mainloop()
