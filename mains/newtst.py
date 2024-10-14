@@ -197,8 +197,8 @@ def display_initial_cards():
     dealer_width += 25
     root.after(800, lambda: dealertotal.config(text=f"Dealer Total: {dealer_total.get()}"))
 
-    #display one face down card for dealer
-    face_down_card = deal_card()  #save the face down card for later flipping
+    #display one fac down card for dealer
+    face_down_card = deal_card()  #save the face down card for flippin later 
     try:
         card_back_image = Image.open(card_back)
         resized_card_back = card_back_image.resize((100, 150))

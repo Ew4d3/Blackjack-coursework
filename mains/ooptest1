@@ -1,0 +1,272 @@
+import tkinter as tk
+from tkinter import Label, Button
+from PIL import Image, ImageTk
+import random
+import os
+
+class BlackJackGame:
+    def __init__(self, root):
+        self.root = root
+        self.root.geometry('1080x720')
+        self.root.configure(background='#458B00')
+        self.root.title('BlackJack')
+
+        # Initialize game variables
+        self.suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+        self.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+        self.cards = [(value + " of " + suit) for suit in self.suits for value in self.values]
+        random.shuffle(self.cards)
+
+        self.image_directory = "mains/PNG-cards-1.3/"
+        self.card_back = "mains/PNG-cards-1.3/card back red.png"
+        self.image_refs = []
+
+        self.player_cards = []
+        self.dealer_cards = []
+        self.player_total = tk.IntVar(value=0)
+        self.dealer_total = tk.IntVar(value=0)
+        self.face_down_label = None
+        self.face_down_card = None
+
+        self.player_width = 220
+        self.dealer_width = 450
+        self.player_length = 200
+        self.dealer_length = 200
+
+        self.current_bet = 0
+        self.balance = 100
+
+        # Initialize labels and buttons
+        self.result_label = Label(root, text='BlackJack Pays 3:2', bg='#458B00', font=('arial', 32, 'bold'))
+        self.result_label.place(x=220, y=50)
+
+        self.playertotal = Label(root, text='Player Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
+        self.playertotal.place(x=170, y=100)
+
+        self.dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
+        self.dealertotal.place(x=500, y=100)
+
+        self.bet_amount_label = Label(root, text=f'You have placed a £{self.current_bet} bet', bg='#458B00', font=('arial', 12, 'normal'))
+        self.bet_amount_label.place(x=360, y=680)
+
+        self.hit_button = Button(root, text='Hit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.hit)
+        self.hit_button.place(x=98, y=92)
+
+        self.stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.stand)
+        self.stand_button.place(x=632, y=89)
+
+        # Betting buttons and reset
+        Button(root, text='1', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.one).place(x=300, y=530)
+        Button(root, text='5', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.five).place(x=335, y=530)
+        Button(root, text='10', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.ten).place(x=370, y=530)
+        Button(root, text='20', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.twenty).place(x=415, y=530)
+        Button(root, text='50', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.fifty).place(x=462, y=530)
+        Button(root, text='100', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.hundred).place(x=510, y=530)
+        Button(root, text='max', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.max_bet).place(x=560, y=530)
+        Button(root, text='min', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.min_bet).place(x=610, y=530)
+        Button(root, text='Reset\nbet to 0', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.reset_bet).place(x=700, y=530)
+
+        self.play_again_button = Button(root, text='Quit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=self.play_again)
+        self.play_again_button.place(x=350, y=420)
+
+        # Initialize game
+        self.display_initial_cards()
+
+    def deal_card(self):
+        if len(self.cards) == 0:
+            self.cards = [(value + " of " + suit) for suit in self.suits for value in self.values]
+            random.shuffle(self.cards)
+        return self.cards.pop(0)
+
+    def slide_card(self, image_label, final_x, final_y, flip_function=lambda: None, step=10, delay=10):
+        """Slides a card to a target position with a smooth animation."""
+        current_x, current_y = image_label.winfo_x(), image_label.winfo_y()
+        moved = False
+
+        # Move in the x direction
+        if current_x < final_x:
+            new_x = min(current_x + step, final_x)
+            image_label.place(x=new_x, y=current_y)
+            moved = True
+        elif current_x > final_x:
+            new_x = max(current_x - step, final_x)
+            image_label.place(x=new_x, y=current_y)
+            moved = True
+        else:
+            new_x = final_x
+
+        # Move in the y direction
+        if current_y < final_y:
+            new_y = min(current_y + step, final_y)
+            image_label.place(x=new_x, y=new_y)
+            moved = True
+        elif current_y > final_y:
+            new_y = max(current_y - step, final_y)
+            image_label.place(x=new_x, y=new_y)
+            moved = True
+        else:
+            new_y = final_y
+
+        if moved:
+            self.root.after(delay, self.slide_card, image_label, final_x, final_y, flip_function, step, delay)
+        else:
+            flip_function()
+
+    def flip_card(self, image_label, card_image):
+        """Flips a face-down card to show its face."""
+        image_label.config(image=card_image)
+        image_label.image = card_image  # Keep a reference to avoid garbage collection
+
+        # Update player total after the card is flipped
+        self.playertotal.config(text=f"Player Total: {self.player_total.get()}")
+        self.dealertotal.config(text=f"Dealer Total: {self.dealer_total.get()}")
+
+        # Check if the player has Blackjack or Bust after the card flip
+        self.check_player_status()
+
+    def carddisplay(self, card, x, y):
+        """Display a card with animation."""
+        card_image_path = os.path.join(self.image_directory, card.replace(" ", "_") + ".png")
+        try:
+            # Load and display the card back image
+            card_back_image = Image.open(self.card_back)
+            resized_card_back = card_back_image.resize((100, 150))
+            tk_card_back = ImageTk.PhotoImage(resized_card_back)
+            self.image_refs.append(tk_card_back)
+            image_label = Label(self.root, image=tk_card_back)
+            image_label.place(x=0, y=y)
+
+            # Load and display the actual card image
+            card_image = Image.open(card_image_path)
+            resized_card_image = card_image.resize((100, 150))
+            tk_card_image = ImageTk.PhotoImage(resized_card_image)
+            self.image_refs.append(tk_card_image)
+
+            self.slide_card(image_label, x, y, lambda: self.flip_card(image_label, tk_card_image))
+        except FileNotFoundError:
+            print(f"Error: File not found at {card_image_path}")
+
+    def display_initial_cards(self):
+        """Deals and displays the initial cards with animations."""
+        # Deal and display two cards for player
+        for _ in range(2):
+            card = self.deal_card()
+            self.carddisplay(card, self.player_width, self.player_length)
+            card_value_int = self.card_value(card)
+            self.player_cards.append(card_value_int)
+            self.player_total.set(self.player_total.get() + card_value_int)
+            self.player_width += 25
+            self.root.after(800, lambda: self.playertotal.config(text=f"Player Total: {self.player_total.get()}"))
+            self.check_player_status()
+
+        # Deal and display one face-up card for dealer
+        card = self.deal_card()
+        self.carddisplay(card, self.dealer_width, self.dealer_length)
+        card_value_int = self.card_value(card)
+        self.dealer_cards.append(card_value_int)
+        self.dealer_total.set(self.dealer_total.get() + card_value_int)
+        self.dealer_width += 25
+
+        # Deal and display one face-down card for dealer
+        self.face_down_card = Image.open(self.card_back)
+        resized_card_back = self.face_down_card.resize((100, 150))
+        tk_card_back = ImageTk.PhotoImage(resized_card_back)
+        self.image_refs.append(tk_card_back)
+
+        self.face_down_label = Label(self.root, image=tk_card_back)
+        self.face_down_label.place(x=self.dealer_width, y=self.dealer_length)
+
+    def card_value(self, card):
+        """Returns the value of a card."""
+        value = card.split()[0]
+        if value.isdigit():
+            return int(value)
+        elif value in ['Jack', 'Queen', 'King']:
+            return 10
+        else:  # Ace
+            return 11  # Note: Handling of Aces should be done elsewhere
+
+    # Other game methods (hit, stand, check_player_status, etc.)
+
+    def play_again(self):
+        """Reset the game for another round."""
+        self.player_cards = []
+        self.dealer_cards = []
+        self.player_total.set(0)
+        self.dealer_total.set(0)
+        self.player_width = 220
+        self.dealer_width = 450
+        self.result_label.config(text='BlackJack Pays 3:2')
+        self.display_initial_cards()
+
+    def hit(self):
+        """Player chooses to hit."""
+        card = self.deal_card()
+        self.carddisplay(card, self.player_width, self.player_length)
+        card_value_int = self.card_value(card)
+        self.player_cards.append(card_value_int)
+        self.player_total.set(self.player_total.get() + card_value_int)
+        self.player_width += 25
+        self.playertotal.config(text=f"Player Total: {self.player_total.get()}")
+        self.check_player_status()
+
+    def stand(self):
+        """Player chooses to stand."""
+        # Implement the logic for the dealer's turn and check for results
+        pass
+
+    def check_player_status(self):
+        """Check the player's status (Blackjack, Bust, etc.)."""
+        # Implement checks for blackjack or bust conditions
+        pass
+
+    def one(self):
+        """Place a bet of 1."""
+        self.current_bet = 1
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def five(self):
+        """Place a bet of 5."""
+        self.current_bet = 5
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def ten(self):
+        """Place a bet of 10."""
+        self.current_bet = 10
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def twenty(self):
+        """Place a bet of 20."""
+        self.current_bet = 20
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def fifty(self):
+        """Place a bet of 50."""
+        self.current_bet = 50
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def hundred(self):
+        """Place a bet of 100."""
+        self.current_bet = 100
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def max_bet(self):
+        """Place a max bet."""
+        self.current_bet = self.balance
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def min_bet(self):
+        """Reset bet to minimum."""
+        self.current_bet = 0
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+    def reset_bet(self):
+        """Reset bet to zero."""
+        self.current_bet = 0
+        self.bet_amount_label.config(text=f'You have placed a £{self.current_bet} bet')
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    game = BlackJackGame(root)
+    root.mainloop()
