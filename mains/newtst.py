@@ -249,6 +249,7 @@ def check_player_status():
             player_total.set(player_total.get() - 10)
             player_cards[player_cards.index(11)] = 1
         else:
+            flip_face_down_card()
             end_game("Bust! Dealer wins.")
     elif player_total.get() == 21:
         end_game("Blackjack! Player wins.")
