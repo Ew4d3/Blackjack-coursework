@@ -11,6 +11,8 @@ values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King',
 cards = [(value + " of " + suit) for suit in suits for value in values]
 random.shuffle(cards)
 
+global balance
+
 image_directory = "mains/PNG-cards-1.3/"
 card_back = "mains/PNG-cards-1.3/card back red.png"
 image_refs = []
@@ -364,6 +366,9 @@ playertotal = Label(root, text='Player Total: 0', bg='#458B00', font=('arial', 1
 playertotal.place(x=170, y=100)
 dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
 dealertotal.place(x=500, y=100)
+
+balance_label = Label(root, text=f'balance is {balance}', bg='#458B00', font=('arial', 12, 'normal'))
+balance_label.place(x=620, y=50)
 
 #deal initial cards when game starts
 display_initial_cards()
