@@ -44,12 +44,15 @@ def getInputBoxValue():
 
 #update the bet amount label
 def update_bet_amount(amount):
-    global current_bet
+    global current_bet, balance
     if current_bet + amount > 100:
         bet_amount_label.config(text='You have exceeded the bet amount. Please try again.')
     else:
         current_bet += amount
         bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
+    balance=balance-amount
+    balance_label = Label(root, text=f'balance is {balance}', bg='#458B00', font=('arial', 12, 'normal'))
+    balance_label.place(x=620, y=50)
 
 #called when buttons are clicked
 def hit():
@@ -308,6 +311,8 @@ def play_again():#game would never end , cards kept on queueing uo against other
     root.after(100, lambda: playertotal.config(text=f"Player Total: 0"))
     root.after(100, lambda: dealertotal.config(text=f"Dealer Total: 0"))
     root.after(100, lambda: result_label.config(text=f"BlackJack Pays 3:2"))
+    root.after(100, lambda: balance_label.config(text=f"balance is {balance}")) 
+
 
 
 
@@ -329,7 +334,7 @@ def play_again():#game would never end , cards kept on queueing uo against other
 
     #clear all card images     before cards would overlay other cards so game would crash etc 
     for widget in root.winfo_children():
-        if isinstance(widget, Label) and widget != bet_amount_label and widget != result_label and widget != playertotal and widget != dealertotal:
+        if isinstance(widget, Label) and widget != bet_amount_label and widget != result_label and widget != playertotal and widget != dealertotal and widget != balance_label:
             widget.destroy()
 
     # deal new initial cards
@@ -408,6 +413,8 @@ dealertotal.place(x=500, y=100)
 
 balance_label = Label(root, text=f'balance is {balance}', bg='#458B00', font=('arial', 12, 'normal'))
 balance_label.place(x=620, y=50)
+
+
 
 #deal initial cards when game starts
 display_initial_cards()
