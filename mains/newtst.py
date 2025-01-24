@@ -117,7 +117,7 @@ def deal_card():
     card = cards.pop(0)
     return card
 
-def slide_card(image_label, final_x, final_y, flip_function=lambda: None, step=10, delay=10): # animations 
+def slide_card(image_label, final_x, final_y, flip_function=lambda: None, step=10, delay=10): # animations and stuff 
     current_x, current_y = image_label.winfo_x(), image_label.winfo_y()
     moved = False
 
@@ -172,7 +172,7 @@ def carddisplay(card, x, y):
         tk_card_image = ImageTk.PhotoImage(resized_card_image)
         image_refs.append(tk_card_image)
 
-        slide_card(image_label, x, y, lambda: flip_card(image_label, tk_card_image))
+        slide_card(image_label, x, y, lambda: flip_card(image_label, tk_card_image)) #lambda delays flip_card call- once cards slide, then flip
     except FileNotFoundError:
         print(f"Error: File not found at {card_image_path}")
 
@@ -308,7 +308,7 @@ def play_again():#game would never end , cards kept on queueing uo against other
     global player_width, dealer_width, player_cards, dealer_cards
     global player_total, dealer_total, current_bet
 
-    root.after(100, lambda: playertotal.config(text=f"Player Total: 0"))
+    root.after(100, lambda: playertotal.config(text=f"Player Total: 0")) #lambda allows root.after to work propely , oterwise need sperate fucntion to call after 100ms
     root.after(100, lambda: dealertotal.config(text=f"Dealer Total: 0"))
     root.after(100, lambda: result_label.config(text=f"BlackJack Pays 3:2"))
     root.after(100, lambda: balance_label.config(text=f"balance is {balance}")) 
