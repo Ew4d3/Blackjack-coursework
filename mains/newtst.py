@@ -28,6 +28,10 @@ root.geometry('1080x720')
 root.configure(background='#458B00')
 root.title('BlackJack')
 
+
+
+
+
 #get the user input from the text input box and display it
 def getInputBoxValue():
     global current_bet
@@ -47,6 +51,7 @@ def update_bet_amount(amount):
     global current_bet, balance
     if current_bet + amount > 100:
         bet_amount_label.config(text='You have exceeded the bet amount. Please try again.')
+        balance=100
     else:
         current_bet += amount
         bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
@@ -66,9 +71,11 @@ def stand():
 
 def bet_amount(amount):
     update_bet_amount(amount)
+    balance=balance-amount
 
 def one():
     bet_amount(1)
+
 
 def five():
     bet_amount(5)
@@ -94,9 +101,11 @@ def min_bet():
     bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
 
 def reset():
-    global current_bet
+    global current_bet, balance
     current_bet = 0
     bet_amount_label.config(text=f'Bet amount reset to 0')
+    balance=balance+bet_amount
+
 
 def card_value(card):#see if is a 10 value or 11 value , or regular card.
     value = card.split()[0]
@@ -220,6 +229,7 @@ def display_initial_cards():
 def check_initial_blackjack():
     if player_total.get() == 21:
         end_game("Blackjack! Player wins.")
+        balance=balance*1.5
 
 def flip_face_down_card(): #face down card would just sit therr at the start then would slide in but it was techincally already there
     global face_down_card , dealer_width , card_image_path , card_image_path
@@ -300,6 +310,17 @@ def end_game(result):
     bets9.config(state='disabled')
     bet.config(state='disabled')
     betbox.config(state='disabled')
+
+
+################################################################
+
+    play_again_button.config(state='normal')
+    
+################################################################
+
+
+
+
     
 
     update_totals()
@@ -357,7 +378,20 @@ def play_again():#game would never end , cards kept on queueing uo against other
     bets9.config(state='normal')
     bet.config(state='normal')
     betbox.config(state='normal')
+
+
+
+
+
+################################################################
+
+    play_again_button.config(state='disabled')
   
+
+################################################################
+
+
+
 
 #main game logic variables
 player_cards = []
@@ -413,6 +447,18 @@ dealertotal.place(x=500, y=100)
 
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
 balance_label.place(x=620, y=500)
+
+
+
+
+################################################################
+
+play_again_button.config(state='disabled')
+
+################################################################
+
+
+
 
 
 
