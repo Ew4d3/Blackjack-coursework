@@ -324,25 +324,25 @@ def update_totals(): # updates the total lables
 
 def end_game(result): #disables buttons so no undesired sideeffects and displays at top th result
     result_label.config(text=result)
-    hit_button.config(state='disabled')
-    stand_button.config(state='disabled')
-    play_again_button.config(text="Play Again")
-    bets1.config(state='disabled')
-    bets2.config(state='disabled')
-    bets3.config(state='disabled')
-    bets4.config(state='disabled')
-    bets5.config(state='disabled')
-    bets6.config(state='disabled')
-    bets7.config(state='disabled')
-    bets8.config(state='disabled')
-    bets9.config(state='disabled')
+    hit_btn.config(state='disabled')
+    stand_btn.config(state='disabled')
+    play_again_btn.config(text="Play Again")
+    bet_btn1.config(state='disabled')
+    bet_btn5.config(state='disabled')
+    bet_btn10.config(state='disabled')
+    bet_btn20.config(state='disabled')
+    bet_btn50.config(state='disabled')
+    bet_btn100.config(state='disabled')
+    bet_btn_max.config(state='disabled')
+    bet_btn_min.config(state='disabled')
+    bet_btn_reset.config(state='disabled')
     bet.config(state='disabled')
     betbox.config(state='disabled')
 
 
 ################################################################
 
-    play_again_button.config(state='normal')
+    play_again_btn.config(state='normal')
     
 ################################################################
 
@@ -390,19 +390,19 @@ def play_again():#game would never end , cards kept on queueing uo against other
 
 
     #enable hit and stand buttons
-    hit_button.config(state='normal')
-    stand_button.config(state='normal')
-    play_again_button.config(text="play again")
-    quit_button.config(text='quit')
-    bets1.config(state='normal')
-    bets2.config(state='normal')
-    bets3.config(state='normal')
-    bets4.config(state='normal')
-    bets5.config(state='normal')
-    bets6.config(state='normal')
-    bets7.config(state='normal')
-    bets8.config(state='normal')
-    bets9.config(state='normal')
+    hit_btn.config(state='normal')
+    stand_btn.config(state='normal')
+    play_again_btn.config(text="play again")
+    quit_btn.config(text='quit')
+    bet_btn1.config(state='normal')
+    bet_btn5.config(state='normal')
+    bet_btn10.config(state='normal')
+    bet_btn20.config(state='normal')
+    bet_btn50.config(state='normal')
+    bet_btn100.config(state='normal')
+    bet_btn_max.config(state='normal')
+    bet_btn_min.config(state='normal')
+    bet_btn_reset.config(state='normal')
     bet.config(state='normal')
     betbox.config(state='normal')
 
@@ -412,7 +412,7 @@ def play_again():#game would never end , cards kept on queueing uo against other
 
 ################################################################
 
-    play_again_button.config(state='disabled')
+    play_again_btn.config(state='disabled')
   
 
 ################################################################
@@ -427,36 +427,36 @@ player_total = tk.IntVar(value=0)
 dealer_total = tk.IntVar(value=0)
 
 #ui stuff buttons labels etc
-hit_button = Button(root, text='Hit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hit)
-hit_button.place(x=98, y=92)
-stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=stand)
-stand_button.place(x=632, y=89)
+hit_btn = Button(root, text='Hit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hit)
+hit_btn.place(x=98, y=92)
+stand_btn = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=stand)
+stand_btn.place(x=632, y=89)
 
 #bet button labels and corresponding functions
-bets1=Button(root, text='1', bg='#FFFAFA', font=('arial', 12, 'normal'), command=one)
-bets1.place(x=270, y=530)
-bets2=Button(root, text='5', bg='#FFFAFA', font=('arial', 12, 'normal'), command=five)
-bets2.place(x=335, y=530)
-bets3=Button(root, text='10', bg='#FFFAFA', font=('arial', 12, 'normal'), command=ten)
-bets3.place(x=370, y=530)
-bets4=Button(root, text='20', bg='#FFFAFA', font=('arial', 12, 'normal'), command=twenty)
-bets4.place(x=415, y=530)
-bets5=Button(root, text='50', bg='#FFFAFA', font=('arial', 12, 'normal'), command=fifty)
-bets5.place(x=462, y=530)
-bets6=Button(root, text='100', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hundred)
-bets6.place(x=510, y=530)
-bets7=Button(root, text='max', bg='#FFFAFA', font=('arial', 12, 'normal'), command=max_bet)
-bets7.place(x=560, y=530)
-bets8=Button(root, text='min', bg='#FFFAFA', font=('arial', 12, 'normal'), command=min_bet)
-bets8.place(x=610, y=530)
-bets9=Button(root, text='Reset\nbet to 0', bg='#FFFAFA', font=('arial', 12, 'normal'), command=reset)
-bets9.place(x=700, y=530)
+bet_btn1=Button(root, text='1', bg='#FFFAFA', font=('arial', 12, 'normal'), command=one)
+bet_btn1.place(x=270, y=530)
+bet_btn5=Button(root, text='5', bg='#FFFAFA', font=('arial', 12, 'normal'), command=five)
+bet_btn5.place(x=335, y=530)
+bet_btn10=Button(root, text='10', bg='#FFFAFA', font=('arial', 12, 'normal'), command=ten)
+bet_btn10.place(x=370, y=530)
+bet_btn20=Button(root, text='20', bg='#FFFAFA', font=('arial', 12, 'normal'), command=twenty)
+bet_btn20.place(x=415, y=530)
+bet_btn50=Button(root, text='50', bg='#FFFAFA', font=('arial', 12, 'normal'), command=fifty)
+bet_btn50.place(x=462, y=530)
+bet_btn100=Button(root, text='100', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hundred)
+bet_btn100.place(x=510, y=530)
+bet_btn_max=Button(root, text='max', bg='#FFFAFA', font=('arial', 12, 'normal'), command=max_bet)
+bet_btn_max.place(x=560, y=530)
+bet_btn_min=Button(root, text='min', bg='#FFFAFA', font=('arial', 12, 'normal'), command=min_bet)
+bet_btn_min.place(x=610, y=530)
+bet_btn_reset=Button(root, text='Reset\nbet to 0', bg='#FFFAFA', font=('arial', 12, 'normal'), command=reset)
+bet_btn_reset.place(x=700, y=530)
 
-play_again_button = Button(root, text='play again', bg='#FFFAFA', font=('arial', 12, 'normal'), command=play_again)
-play_again_button.place(x=350, y=420)
+play_again_btn = Button(root, text='play again', bg='#FFFAFA', font=('arial', 12, 'normal'), command=play_again)
+play_again_btn.place(x=350, y=420)
 
-quit_button = Button(root, text='quit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=quit)
-quit_button.place(x=200, y=420)
+quit_btn = Button(root, text='quit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=quit)
+quit_btn.place(x=200, y=420)
 #input box for bet input that you can type into and corresponing fuct
 betbox=Button(root, text='Submit Bet Amount', bg='#FFFAFA', font=('arial', 12, 'normal'), command=getInputBoxValue)
 betbox.place(x=355, y=650)
@@ -478,11 +478,11 @@ dealertotal.place(x=500, y=100)
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
 balance_label.place(x=650,y=500)
 
-
+button
 
 ################################################################
 
-play_again_button.config(state='disabled')
+play_again_btn.config(state='disabled')
 
 ################################################################
 
