@@ -43,6 +43,7 @@ def getInputBoxValue():
         else:
             current_bet += input_value
             bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
+            update_balance(balance)
     except ValueError:
         bet_amount_label.config(text='Invalid input. Please enter a number.')
 
@@ -51,13 +52,24 @@ def update_bet_amount(amount):
     global current_bet, balance
     if current_bet + amount > 100:
         bet_amount_label.config(text='You have exceeded the bet amount. Please try again.')
-        balance=100
+       
     else:
         current_bet += amount
         bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
+        
     balance=balance-amount
-    balance_label = Label(root, text=f'balance is {balance}', bg='#458B00', font=('arial', 12, 'normal'))
-    balance_label.place(x=620, y=50)
+ 
+
+
+
+
+def update_balance(balance):
+    balance=balance-current_bet
+    balance_label.config(text=f'balance is {balance}')
+
+
+
+
 
 #called when buttons are clicked
 def hit():
@@ -71,11 +83,10 @@ def stand():
 
 def bet_amount(amount):
     update_bet_amount(amount)
-    balance=balance-amount
-
+    update_balance(balance)
+   
 def one():
     bet_amount(1)
-
 
 def five():
     bet_amount(5)
@@ -99,12 +110,15 @@ def min_bet():
     global current_bet
     current_bet = 1
     bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
+    update_balance(balance)
 
 def reset():
     global current_bet, balance
     current_bet = 0
     bet_amount_label.config(text=f'Bet amount reset to 0')
-    balance=balance+bet_amount
+    balance=100 
+    update_balance(balance)
+
 
 
 def card_value(card):#see if is a 10 value or 11 value , or regular card.
@@ -227,9 +241,11 @@ def display_initial_cards():
     check_initial_blackjack()
 
 def check_initial_blackjack():
+    global balance
     if player_total.get() == 21:
         end_game("Blackjack! Player wins.")
-        balance=balance*1.5
+        balance=balance+(current_bet*1.5)
+        update_balance(balance)
 
 def flip_face_down_card(): #face down card would just sit therr at the start then would slide in but it was techincally already there
     global face_down_card , dealer_width , card_image_path , card_image_path
@@ -259,6 +275,7 @@ def player_hit():
     check_player_status()
 
 def check_player_status():
+    global balance
     if player_total.get() > 21:
         if 11 in player_cards:
             player_total.set(player_total.get() - 10)
@@ -266,8 +283,12 @@ def check_player_status():
         else:
             flip_face_down_card()
             end_game("Bust! Dealer wins.")
+            balance=balance+current_bet
+            update_balance(balance)
     elif player_total.get() == 21:
         end_game("Blackjack! Player wins.")
+        balance=balance+(current_bet*1.5)
+        update_balance(balance)
 
 def dealer_turn():
     global dealer_width
@@ -281,14 +302,22 @@ def dealer_turn():
     check_winner()
 
 def check_winner():
+    global balance
     if dealer_total.get() > 21:
         end_game("Dealer busts! Player wins.")
+        balance=balance+current_bet
+        update_balance(balance)
     elif player_total.get() > dealer_total.get():
         end_game("Player wins!")
+        balance=balance+(current_bet*1.5)
+        update_balance(balance)
     elif dealer_total.get() == player_total.get():
         end_game("Push!")
+        balance=balance+current_bet
+        update_balance(balance)
     else:
         end_game("Dealer wins!")
+
 
 def update_totals():
     root.after(500, lambda: playertotal.config(text=f"Player Total: {player_total.get()}"))
@@ -332,7 +361,6 @@ def play_again():#game would never end , cards kept on queueing uo against other
     root.after(100, lambda: playertotal.config(text=f"Player Total: 0")) #lambda allows root.after to work propely , oterwise need sperate fucntion to call after 100ms
     root.after(100, lambda: dealertotal.config(text=f"Dealer Total: 0"))
     root.after(100, lambda: result_label.config(text=f"BlackJack Pays 3:2"))
-    root.after(100, lambda: balance_label.config(text=f"balance is {balance}")) 
 
 
 
@@ -446,8 +474,7 @@ dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 1
 dealertotal.place(x=500, y=100)
 
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
-balance_label.place(x=620, y=500)
-
+balance_label.place(x=650,y=500)
 
 
 
