@@ -411,8 +411,8 @@ playertotal.place(x=170, y=100)
 dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
 dealertotal.place(x=500, y=100)
 
-balance_label = Label(root, text=f'balance is {balance}', bg='#458B00', font=('arial', 12, 'normal'))
-balance_label.place(x=620, y=50)
+balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
+balance_label.place(x=620, y=500)
 
 
 
