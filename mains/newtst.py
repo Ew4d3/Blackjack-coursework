@@ -31,7 +31,6 @@ root.title('BlackJack')
 
 
 
-
 #get the user input from the text input box and display it
 def getInputBoxValue():
     global current_bet
@@ -63,7 +62,7 @@ def update_bet_amount(amount):
 
 
 
-def update_balance(balance):
+def update_balance(balance): #updates the balance when betting so label is updated accordingly
     balance=balance-current_bet
     balance_label.config(text=f'balance is {balance}')
 
@@ -106,13 +105,13 @@ def hundred():
 def max_bet():
     bet_amount(100 - current_bet)
 
-def min_bet():
+def min_bet(): #minimum bet eg 1
     global current_bet
     current_bet = 1
     bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
     update_balance(balance)
 
-def reset():
+def reset(): # resets bet to 0
     global current_bet, balance
     current_bet = 0
     bet_amount_label.config(text=f'Bet amount reset to 0')
@@ -130,7 +129,7 @@ def card_value(card):#see if is a 10 value or 11 value , or regular card.
     else:
         return int(value)
 
-def deal_card():
+def deal_card(): #deals cards
     global cards
     if len(cards) == 0:
         suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
@@ -173,13 +172,13 @@ def slide_card(image_label, final_x, final_y, flip_function=lambda: None, step=1
     else:
         flip_function()
 
-def flip_card(image_label, card_image):
+def flip_card(image_label, card_image): #chnages card back image for dealer to actual stored card image so player can see the card
     image_label.config(image=card_image)
     image_label.image = card_image
 
     update_totals()
 
-def carddisplay(card, x, y):
+def carddisplay(card, x, y): #complicated stuff for finding path for cards and opening them, resize , placing them etc
     global image_refs
     card_image_path = os.path.join(image_directory, card.replace(" ", "_") + ".png")
     try:
@@ -200,7 +199,7 @@ def carddisplay(card, x, y):
         print(f"Error: File not found at {card_image_path}")
 
 
-def display_initial_cards():
+def display_initial_cards(): # dsiplays rhe 2 player cards and 2 dealers, one being flipped/hidden
     global player_width, dealer_width, face_down_label, face_down_card
 
     #deal and display two cards for player
@@ -240,7 +239,7 @@ def display_initial_cards():
 
     check_initial_blackjack()
 
-def check_initial_blackjack():
+def check_initial_blackjack():#checks to see if the forst 2 cards are blackjack eg ace + king=21
     global balance
     if player_total.get() == 21:
         end_game("Blackjack! Player wins.")
@@ -264,7 +263,7 @@ def flip_face_down_card(): #face down card would just sit therr at the start the
     except FileNotFoundError:
         print(f"Error: File not found at {card_image_path}")
 
-def player_hit():
+def player_hit(): #player hit, gets another card and updates position for card to correctly ovberlap 
     global player_width
     card = deal_card()
     carddisplay(card, player_width, player_length)
@@ -274,7 +273,7 @@ def player_hit():
     player_width += 25
     check_player_status()
 
-def check_player_status():
+def check_player_status(): #checks if the player has won etc and gets their total
     global balance
     if player_total.get() > 21:
         if 11 in player_cards:
@@ -290,7 +289,7 @@ def check_player_status():
         balance=balance+(current_bet*1.5)
         update_balance(balance)
 
-def dealer_turn():
+def dealer_turn(): #dealers turn when player stands , gets card and updates position for obverlap
     global dealer_width
     while dealer_total.get() < 17:
         card = deal_card()
@@ -301,7 +300,7 @@ def dealer_turn():
         dealer_width += 25
     check_winner()
 
-def check_winner():
+def check_winner(): # checks to see who has won and update balance accordingly based on bet amount.
     global balance
     if dealer_total.get() > 21:
         end_game("Dealer busts! Player wins.")
@@ -319,11 +318,11 @@ def check_winner():
         end_game("Dealer wins!")
 
 
-def update_totals():
+def update_totals(): # updates the total lables
     root.after(500, lambda: playertotal.config(text=f"Player Total: {player_total.get()}"))
     root.after(500, lambda: dealertotal.config(text=f"Dealer Total: {dealer_total.get()}"))
 
-def end_game(result):
+def end_game(result): #disables buttons so no undesired sideeffects and displays at top th result
     result_label.config(text=result)
     hit_button.config(state='disabled')
     stand_button.config(state='disabled')
@@ -433,6 +432,7 @@ hit_button.place(x=98, y=92)
 stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=stand)
 stand_button.place(x=632, y=89)
 
+#bet button labels and corresponding functions
 bets1=Button(root, text='1', bg='#FFFAFA', font=('arial', 12, 'normal'), command=one)
 bets1.place(x=270, y=530)
 bets2=Button(root, text='5', bg='#FFFAFA', font=('arial', 12, 'normal'), command=five)
@@ -457,7 +457,7 @@ play_again_button.place(x=350, y=420)
 
 quit_button = Button(root, text='quit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=quit)
 quit_button.place(x=200, y=420)
-
+#input box for bet input that you can type into and corresponing fuct
 betbox=Button(root, text='Submit Bet Amount', bg='#FFFAFA', font=('arial', 12, 'normal'), command=getInputBoxValue)
 betbox.place(x=355, y=650)
 bet = Entry(root)
@@ -466,6 +466,7 @@ Label(root, text='Bet Amount Input:', bg='#458B00', font=('arial', 12, 'normal')
 bet_amount_label = Label(root, text=f'You have placed a £{current_bet} bet', bg='#458B00', font=('arial', 12, 'normal'))
 bet_amount_label.place(x=360, y=680)
 
+#result labels shows who won the game, as well as the player totals taht show the hand values for player+dealer
 result_label = Label(root, text='BlackJack Pays 3:2', bg='#458B00', font=('arial', 32, 'bold'))
 result_label.place(x=220, y=50)
 playertotal = Label(root, text='Player Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
@@ -473,6 +474,7 @@ playertotal.place(x=170, y=100)
 dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
 dealertotal.place(x=500, y=100)
 
+#displays balance value.
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
 balance_label.place(x=650,y=500)
 
@@ -488,8 +490,8 @@ play_again_button.config(state='disabled')
 
 
 
-
 #deal initial cards when game starts
 display_initial_cards()
 
+#roooooooot
 root.mainloop()
