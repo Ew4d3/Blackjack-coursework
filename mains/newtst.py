@@ -338,13 +338,9 @@ def end_game(result): #disables buttons so no undesired sideeffects and displays
     bet_btn_reset.config(state='disabled')
     bet.config(state='disabled')
     betbox.config(state='disabled')
-
-
-################################################################
-
     play_again_btn.config(state='normal')
     
-################################################################
+
 
 
 
@@ -405,17 +401,10 @@ def play_again():#game would never end , cards kept on queueing uo against other
     bet_btn_reset.config(state='normal')
     bet.config(state='normal')
     betbox.config(state='normal')
-
-
-
-
-
-################################################################
-
     play_again_btn.config(state='disabled')
   
 
-################################################################
+
 
 
 
@@ -478,13 +467,10 @@ dealertotal.place(x=500, y=100)
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
 balance_label.place(x=650,y=500)
 
-button
-
-################################################################
 
 play_again_btn.config(state='disabled')
 
-################################################################
+
 
 
 

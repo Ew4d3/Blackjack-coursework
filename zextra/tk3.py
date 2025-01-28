@@ -10,7 +10,7 @@ def siuuu():
 
 # Initialize variables
 image_directory = "mains/PNG-cards-1.3/"
-card_back = "E:\Downloads\Blackjack-coursework\mains\PNG-cards-1.3\card back red.png"
+card_back = "mains/PNG-cards-1.3/card back red.png"
 image_refs = []
 current_bet = 0
 balance = 100
@@ -26,6 +26,7 @@ root.configure(background='#458B00')
 root.title('BlackJack')
 
 def update_bet(amount):
+    """Updates the current bet and displays it."""
     global current_bet, balance
     if amount == "reset":
         current_bet = 0
@@ -96,22 +97,16 @@ def hit():
         display_card(card, player_x, player_y)
         player_x += 25  # Offset for the next card
 
+    # Select two random cards for the dealer
     dealer_cards = random.sample(deck, 2)
-    display_card(card, dealer_x, dealer_y)
-    dealer_x += 25
-    display_card(card_back, dealer_x, dealer_y)
-
-def stand():
-    global player_x, dealer_x
-    dealer_cards = random.sample(deck, 1)
     for card in dealer_cards:
         display_card(card, dealer_x, dealer_y)
-        dealer_x += 25  # Offset for the next card   
+        dealer_x += 25  # Offset for the next card
 
 # UI buttons and labels
 hit_button = Button(root, text='Hit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hit)
 hit_button.place(x=98, y=92)
-stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=stand)
+stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=quit)
 stand_button.place(x=632, y=89)
 
 # Bet buttons
