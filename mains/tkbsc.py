@@ -10,7 +10,7 @@ def siuuu():
 
 # Initialize variables
 image_directory = "mains/PNG-cards-1.3/"
-card_back = "E:\Downloads\Blackjack-coursework\mains\PNG-cards-1.3\card back red.png"
+card_back = "cbp.png"
 image_refs = []
 current_bet = 0
 balance = 100
@@ -88,7 +88,7 @@ def display_card(card, x, y):
 
 def hit():
     """Deals two random cards to the player and dealer."""
-    global player_x, dealer_x
+    global player_x, dealer_x ,card_back
 
     # Select two random cards for the player
     player_cards = random.sample(deck, 2)
