@@ -11,6 +11,7 @@ values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King',
 cards = [(value + " of " + suit) for suit in suits for value in values]
 
 
+
 #shuffle the cards
 for i in range(len(cards)):
     j=random.randint(0, len(cards)-1)
@@ -30,6 +31,7 @@ balance = 100
 player_width = 220
 dealer_width = 450
 length = 200
+winnings=0
 root = tk.Tk()
 root.geometry('1080x720')
 root.configure(background='#458B00')
@@ -117,9 +119,9 @@ def min_bet(): #minimum bet eg 1
 
 def reset(): # resets bet to 0
     global current_bet, balance
+    balance=balance+current_bet
     current_bet = 0
     bet_amount_label.config(text=f'Bet amount reset to 0')
-    balance=100 
     update_balance(balance)
 
 
@@ -248,10 +250,13 @@ def display_initial_cards(): # dsiplays rhe 2 player cards and 2 dealers, one be
 
 
 def check_initial_blackjack():#checks to see if the forst 2 cards are blackjack eg ace + king=21
-    global balance
+    global balance,winnings
     if player_total.get() == 21:
         end_game("Blackjack! Player wins.")
-        balance=balance+(current_bet*1.5)
+        winnings=current_bet*1.5
+        balance=balance+winnings
+        winnings_label.config(text=f'winnings is {winnings}')
+
         update_balance(balance)
 
 
@@ -285,7 +290,7 @@ def player_hit(): #player hit, gets another card and updates position for card t
 
 
 def check_player_status(): #checks if the player has won etc and gets their total
-    global balance
+    global balance,winnings
     if player_total.get() > 21:
         if 11 in player_cards:
             player_total.set(player_total.get() - 10)
@@ -295,7 +300,9 @@ def check_player_status(): #checks if the player has won etc and gets their tota
             end_game("Bust! Dealer wins.")
     elif player_total.get() == 21:
         end_game("Blackjack! Player wins.")
-        balance=balance+(current_bet*1.5)
+        winnings=current_bet*1.5
+        balance=balance+winnings
+        winnings_label.config(text=f'winnings is {winnings}')
         update_balance(balance)
 
 
@@ -312,18 +319,24 @@ def dealer_turn(): #dealers turn when player stands , gets card and updates posi
 
 
 def check_winner(): # checks to see who has won and update balance accordingly based on bet amount.
-    global balance
+    global balance,winnings
     if dealer_total.get() > 21:
         end_game("Dealer busts! Player wins.")
-        balance=balance+(current_bet*1.5)
+        winnings=current_bet*1.5
+        balance=balance+winnings
+        winnings_label.config(text=f'winnings is {winnings}')
         update_balance(balance)
     elif player_total.get() > dealer_total.get():
         end_game("Player wins!")
-        balance=balance+(current_bet*1.5)
+        winnings=current_bet*1.5
+        balance=balance+winnings
+        winnings_label.config(text=f'winnings is {winnings}')
         update_balance(balance)
     elif dealer_total.get() == player_total.get():
         end_game("Push!")
-        balance=balance+current_bet
+        winnings=current_bet*1.5
+        balance=balance+winnings
+        winnings_label.config(text=f'winnings is {winnings}')
         update_balance(balance)
     else:
         end_game("Dealer wins!")
@@ -368,6 +381,7 @@ def play_again():#game would never end , cards kept on queueing uo against other
     root.after(100, lambda: playertotal.config(text=f"Player Total: 0")) #lambda allows root.after to work propely , oterwise need sperate fucntion to call after 100ms
     root.after(100, lambda: dealertotal.config(text=f"Dealer Total: 0"))
     root.after(100, lambda: result_label.config(text=f"BlackJack Pays 3:2"))
+    
 
 
 
@@ -390,8 +404,8 @@ def play_again():#game would never end , cards kept on queueing uo against other
 
     #clear all card images     before cards would overlay other cards so game would crash etc 
     for widget in root.winfo_children():
-        if isinstance(widget, Label) and widget != bet_amount_label and widget != result_label and widget != playertotal and widget != dealertotal and widget != balance_label:
-            widget.destroy()
+        if isinstance(widget, Label) and widget != bet_amount_label and widget != result_label and widget != playertotal and widget != dealertotal and widget != balance_label and widget !=winnings_label :
+            widget.destroy()#destoys all labels that arent excluded above
 
     # deal new initial cards
     display_initial_cards()
@@ -477,12 +491,14 @@ bet_amount_label.place(x=360, y=680)
 
 #result labels shows who won the game, as well as the player totals taht show the hand values for player+dealer
 result_label = Label(root, text='BlackJack Pays 3:2', bg='#458B00', font=('arial', 32, 'bold'))
-result_label.place(x=220, y=50)
+result_label.place(x=220, y=30)
 playertotal = Label(root, text='Player Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
 playertotal.place(x=170, y=100)
 dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 12, 'normal'))
 dealertotal.place(x=500, y=100)
 
+winnings_label= Label(root, text=f'Winnings:{winnings}', bg='#458B00', font=('arial', 12, 'normal'))
+winnings_label.place(x=650, y=400)
 
 #displays balance value
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
