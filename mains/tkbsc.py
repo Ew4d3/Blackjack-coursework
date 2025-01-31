@@ -62,15 +62,17 @@ def max_bet():
 def reset_bet():
     update_bet("reset")
 
-deck = [f"{rank}_of_{suit}" for rank in ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace']
-        for suit in ['hearts', 'diamonds', 'clubs', 'spades']]
+suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+deck = [(value + " of " + suit) for suit in suits for value in values]
+random.shuffle(deck)
 
 def display_card(card, x, y):
     """Displays a card image at the given coordinates."""
     global image_refs , card_back
 
     # Get the card image path
-    card_image_path = os.path.join(image_directory, f"{card}.png")
+    card_image_path = os.path.join(image_directory, card.replace(" ", "_") + ".png")
     try:
         # Load and resize the card image
         card_image = Image.open(card_image_path)
@@ -88,7 +90,7 @@ def display_card(card, x, y):
 
 def hit():
     #deals two random cards to player+ dealer
-    global player_x, dealer_x ,card_back
+    global player_x, dealer_x ,card_back, dealer_cards
 
     # Select two random cards for the player
     player_cards = random.sample(deck, 2)
@@ -96,10 +98,14 @@ def hit():
         display_card(card, player_x, player_y)
         player_x += 25  #25 px offset for next card
 
+
     dealer_cards = random.sample(deck, 2)
-    display_card(card, dealer_x, dealer_y)
-    dealer_x += 25
-    display_card(card_back, dealer_x, dealer_y)
+    for card in dealer_cards:
+        display_card(card, dealer_x, dealer_y)
+        dealer_x += 25  #25 px offset for next card
+
+
+
 
 def stand():
     global player_x, dealer_x
