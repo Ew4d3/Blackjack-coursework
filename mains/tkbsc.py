@@ -67,7 +67,7 @@ deck = [f"{rank}_of_{suit}" for rank in ['2', '3', '4', '5', '6', '7', '8', '9',
 
 def display_card(card, x, y):
     """Displays a card image at the given coordinates."""
-    global image_refs
+    global image_refs , card_back
 
     # Get the card image path
     card_image_path = os.path.join(image_directory, f"{card}.png")
@@ -87,14 +87,14 @@ def display_card(card, x, y):
         print(f"Error: File not found for card {card}")
 
 def hit():
-    """Deals two random cards to the player and dealer."""
+    #deals two random cards to player+ dealer
     global player_x, dealer_x ,card_back
 
     # Select two random cards for the player
     player_cards = random.sample(deck, 2)
     for card in player_cards:
         display_card(card, player_x, player_y)
-        player_x += 25  # Offset for the next card
+        player_x += 25  #25 px offset for next card
 
     dealer_cards = random.sample(deck, 2)
     display_card(card, dealer_x, dealer_y)
@@ -106,15 +106,15 @@ def stand():
     dealer_cards = random.sample(deck, 1)
     for card in dealer_cards:
         display_card(card, dealer_x, dealer_y)
-        dealer_x += 25  # Offset for the next card   
+        dealer_x += 25  #offset for  next card   
 
-# UI buttons and labels
+#ui buttons + labels
 hit_button = Button(root, text='Hit', bg='#FFFAFA', font=('arial', 12, 'normal'), command=hit)
 hit_button.place(x=98, y=92)
 stand_button = Button(root, text='Stand', bg='#FFFAFA', font=('arial', 12, 'normal'), command=stand)
 stand_button.place(x=632, y=89)
 
-# Bet buttons
+#bet buttons
 bets1 = Button(root, text='1', bg='#FFFAFA', font=('arial', 12, 'normal'), command=one)
 bets1.place(x=270, y=530)
 bets2 = Button(root, text='5', bg='#FFFAFA', font=('arial', 12, 'normal'), command=five)

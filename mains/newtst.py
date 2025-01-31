@@ -56,11 +56,12 @@ def update_bet_amount(amount):
         current_bet += amount
         bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
         
-    balance=balance-amount
+    #balance=balance-amount
  
 
 
 
+    global balance
 
 def update_balance(balance): #updates the balance when betting so label is updated accordingly
     balance=balance-current_bet
@@ -106,7 +107,7 @@ def max_bet():
     bet_amount(100 - current_bet)
 
 def min_bet(): #minimum bet eg 1
-    global current_bet
+    global current_bet , balance
     current_bet = 1
     bet_amount_label.config(text=f'You have placed a £{current_bet} bet')
     update_balance(balance)
