@@ -19,7 +19,7 @@ title_label.pack(pady=10)
 # Background Image
 bg_label = None  # Initialize bg_label
 try:
-    bg_img = Image.open("/main.png") 
+    bg_img = Image.open("main.png") 
     bg_img = bg_img.resize((1080, 720))  
     bg_img = ImageTk.PhotoImage(bg_img)
     bg_label = tk.Label(root, image=bg_img, bg='#458B00')
