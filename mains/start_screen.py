@@ -3,22 +3,23 @@ import subprocess
 from PIL import Image, ImageTk
 
 def start_game():
-    root.destroy() #close start screen
-    subprocess.run(["python", "E:\Downloads\Blackjack-coursework\mains\main_game.py"])#run main game script
+    root.destroy()  # Close start screen
+    subprocess.run(["python3", "mains/main_game.py"])
 
-#initialize Tkinter
+# Initialize Tkinter
 root = tk.Tk()
 root.geometry('1080x720')
 root.configure(background='#458B00')
 root.title('BlackJack - Start Screen')
 
-#title Label
+# Title Label
 title_label = tk.Label(root, text="Welcome to BlackJack!", font=("Arial", 30, "bold"), bg='#458B00', fg='white')
-title_label.pack(pady=1)
+title_label.pack(pady=10)
 
-#background Image
+# Background Image
+bg_label = None  # Initialize bg_label
 try:
-    bg_img = Image.open("e:\Downloads\main.png") 
+    bg_img = Image.open("/main.png") 
     bg_img = bg_img.resize((1080, 720))  
     bg_img = ImageTk.PhotoImage(bg_img)
     bg_label = tk.Label(root, image=bg_img, bg='#458B00')
@@ -27,13 +28,15 @@ try:
 except FileNotFoundError:
     print("Start screen image not found.")
 
-#start Button
-start_btn = tk.Button(root, text="play for free", font=("Arial", 20, "bold"), bg="green", fg="white", command=start_game)
-start_btn.place(x=370, y=490,width=330, height=70)
+# Start Button
+start_btn = tk.Button(root, text="Play for Free", font=("Arial", 20, "bold"), bg="green", fg="white", command=start_game)
+start_btn.place(x=370, y=490, width=330, height=70)
 
 start_btn.lower()
-bg_label.bind("<Button-1>", lambda e: start_btn.invoke())
 
+# Bind click event if bg_label exists
+if bg_label:  
+    bg_label.bind("<Button-1>", lambda e: start_btn.invoke())
 
-#tk loop
+# Tkinter loop
 root.mainloop()

@@ -69,6 +69,7 @@ def update_bet_amount(amount):
 
 
 def update_balance(balance): #updates the balance when betting so label is updated accordingly
+    global current_bet
     balance=balance-current_bet
     balance_label.config(text=f'balance is {balance}')
 
@@ -119,7 +120,6 @@ def min_bet(): #minimum bet eg 1
 
 def reset(): # resets bet to 0
     global current_bet, balance
-    balance=balance+current_bet
     current_bet = 0
     bet_amount_label.config(text=f'Bet amount reset to 0')
     update_balance(balance)
