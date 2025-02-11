@@ -1,4 +1,4 @@
-#blackjack on initial cards - if the player gets Blackjack (21) on the initial cards game will immediately display Blackjack
+#
 
 import tkinter as tk
 from tkinter import Label, Button, Entry 
@@ -253,7 +253,7 @@ def check_initial_blackjack():#checks to see if the forst 2 cards are blackjack 
     global balance,winnings
     if player_total.get() == 21:
         end_game("Blackjack! Player wins.")
-        winnings=current_bet*1.5
+        winnings=current_bet*2
         balance=balance+winnings
         winnings_label.config(text=f'winnings is {winnings}')
 
@@ -300,7 +300,7 @@ def check_player_status(): #checks if the player has won etc and gets their tota
             end_game("Bust! Dealer wins.")
     elif player_total.get() == 21:
         end_game("Blackjack! Player wins.")
-        winnings=current_bet*1.5
+        winnings=current_bet*2
         balance=balance+winnings
         winnings_label.config(text=f'winnings is {winnings}')
         update_balance(balance)
@@ -334,8 +334,8 @@ def check_winner(): # checks to see who has won and update balance accordingly b
         update_balance(balance)
     elif dealer_total.get() == player_total.get():
         end_game("Push!")
-        winnings=current_bet*1.5
-        balance=balance+winnings
+        winnings=0
+        balance=balance+current_bet
         winnings_label.config(text=f'winnings is {winnings}')
         update_balance(balance)
     else:
@@ -469,7 +469,7 @@ bet_btn_max.place(x=560, y=530)
 bet_btn_min=Button(root, text='min', bg='#FFFAFA', font=('arial', 12, 'normal'), command=min_bet)
 bet_btn_min.place(x=610, y=530)
 bet_btn_reset=Button(root, text='Reset\nbet to 0', bg='#FFFAFA', font=('arial', 12, 'normal'), command=reset)
-bet_btn_reset.place(x=700, y=530)
+bet_btn_reset.place(x=700, y=525)
 
 
 #play again + quit button
@@ -498,16 +498,15 @@ dealertotal = Label(root, text='Dealer Total: 0', bg='#458B00', font=('arial', 1
 dealertotal.place(x=500, y=100)
 
 winnings_label= Label(root, text=f'Winnings:{winnings}', bg='#458B00', font=('arial', 12, 'normal'))
-winnings_label.place(x=650, y=400)
+winnings_label.place(x=650, y=500)
 
 #displays balance value
 balance_label = Label(root, text=f'balance is :{balance}', bg='#458B00', font=('arial', 12, 'normal'))
-balance_label.place(x=650,y=500)
+balance_label.place(x=650,y=575)
 
 
 #disables play again as defult until roubnd ends and you can play again
 play_again_btn.config(state='disabled')
-
 
 
 

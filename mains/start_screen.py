@@ -3,7 +3,7 @@ import subprocess
 from PIL import Image, ImageTk
 
 def start_game():
-    root.destroy()  # Close start screen
+    root.destroy()  #close start screen
     subprocess.run(["python3", "mains/main_game.py"])
 
 #tk stuff
@@ -36,7 +36,7 @@ start_btn.lower() # puts tkinter button behind so can see button design
 
 #so when mouse clicks anywhere on screen, start button is called/pressed
 if bg_label:  
-    bg_label.bind("<Button-1>", lambda e: start_btn.invoke()) #invoke kinda like calls the button coz it aint a function
+    bg_label.bind("<Button-1>", lambda e: start_btn.invoke()) #invoke like calls the button like a function on left mouse click
 
 #roooot
 root.mainloop()
