@@ -18,7 +18,7 @@ for i in range(len(cards)):
     temp=cards[i]
     cards[i]=cards[j]
     cards[j]=temp
-    #print(cards) - test to make sure cards got shuffled    
+    #print(cards) # test to make sure cards got shuffled    
 
 
 global balance
@@ -142,6 +142,7 @@ def deal_card(): #deals cards
         values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
         cards = [(value + " of " + suit) for suit in suits for value in values]
         random.shuffle(cards)
+        print("reshuffling new deck")
     card = cards.pop(0)
     return card
 
@@ -365,13 +366,6 @@ def end_game(result): #disables buttons so no undesired sideeffects and displays
     betbox.config(state='disabled')
     play_again_btn.config(state='normal')
     
-
-
-
-
-
-    
-
     update_totals()
 
 def play_again():#game would never end , cards kept on queueing uo against other games 
@@ -382,10 +376,6 @@ def play_again():#game would never end , cards kept on queueing uo against other
     root.after(100, lambda: dealertotal.config(text=f"Dealer Total: 0"))
     root.after(100, lambda: result_label.config(text=f"BlackJack Pays 3:2"))
     
-
-
-
-
     #reset positions where card should go
     player_width = 220
     dealer_width = 450
@@ -431,8 +421,6 @@ def play_again():#game would never end , cards kept on queueing uo against other
     betbox.config(state='normal')
     play_again_btn.config(state='disabled')
   
-
-
 
 
 
@@ -507,10 +495,6 @@ balance_label.place(x=650,y=575)
 
 #disables play again as defult until roubnd ends and you can play again
 play_again_btn.config(state='disabled')
-
-
-
-
 
 
 
